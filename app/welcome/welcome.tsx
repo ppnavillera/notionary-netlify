@@ -1,5 +1,7 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
+import google from "./google.svg";
+import { GoogleIcon } from "~/components/icons/GoogleIcon";
 
 export function Welcome({ message }: { message: string }) {
   return (
@@ -41,6 +43,14 @@ export function Welcome({ message }: { message: string }) {
               <li className="self-stretch p-3 leading-normal">{message}</li>
             </ul>
           </nav>
+          <button
+            type="button"
+            onClick={() => {}}
+            className="w-full bg-white border border-gray-300 text-gray-700 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 rounded py-2 px-4 flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-700"
+          >
+            <GoogleIcon />
+            Continue with Google
+          </button>
         </div>
       </div>
     </main>
