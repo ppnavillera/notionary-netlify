@@ -1,15 +1,81 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
+
+  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* 커스텀 컬러 팔레트 */
+  /* Notionary Orange */
+  --color-notionary-orange: #e44d26; /* 기본 오렌지색 */
+  --color-notionary-orange-dark: #c33d16; /* 어두운 오렌지색 */
+
+  /* Notionary Gray */
+  --color-notionary-gray-light: #f4f7f9; /* 배경색 (body bg) */
+  --color-notionary-gray: #f0f2f5; /* 입력 필드/태그 배경, 테두리 */
+  --color-notionary-gray-medium: #dcdfe6; /* 입력 필드 테두리, 미묘한 선 */
+  --color-notionary-gray-dark: #a8b0c3; /* 플레이스홀더 텍스트 */
+  --color-notionary-gray-darker: #8c98a9; /* 아이콘 또는 테두리를 위한 약간 더 어두운 회색 */
+
+  /* Notionary Text */
+  --color-notionary-text-primary: #2c3e50; /* 주요 제목, 중요한 텍스트 */
+  --color-notionary-text-secondary: #34495e; /* 부제목, 보조 텍스트 */
+  --color-notionary-text: #555555; /* 기본 문단 텍스트 */
+  --color-notionary-text-light: #7f8c8d; /* 밝은 텍스트, 캡션 */
+
+  /* Notionary Blue */
+  --color-notionary-blue: #3498db; /* 링크 또는 활성 상태에 사용되는 기본 파란색 */
+  --color-notionary-blue-dark: #2980b9; /* 링크 또는 활성 상태에 사용되는 어두운 파란색 */
 }
 
-html,
+/* html,
 body {
   @apply bg-white dark:bg-gray-950;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+} */
+
+/* 전역 스타일 */
+html,
+body {
+  @apply font-sans antialiased bg-notionary-gray-light;
+}
+
+/* Typography 스타일 */
+.prose {
+  @apply text-notionary-text;
+}
+
+.prose a {
+  @apply text-notionary-blue hover:text-notionary-blue-dark;
+}
+
+.prose h1,
+.prose h2 {
+  @apply text-notionary-text-primary;
+}
+
+.prose h3,
+.prose h4 {
+  @apply text-notionary-text-secondary;
+}
+
+.prose strong {
+  @apply text-notionary-text-primary;
+}
+
+.prose code {
+  @apply text-notionary-orange bg-notionary-gray px-1 py-0.5 rounded text-sm font-medium;
+}
+
+.prose pre {
+  @apply p-4 overflow-x-auto rounded-md bg-notionary-text-primary text-notionary-gray-light;
+}
+
+.prose pre code {
+  @apply p-0 font-normal bg-transparent text-inherit;
 }
