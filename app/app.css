@@ -1,43 +1,41 @@
+/* app.css (최종 완성본) */
+
 @import "tailwindcss";
 
 @theme {
-  /* --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; */
-
+  /* 1. 기본 테마를 정의합니다. (폰트, 색상 등) */
   --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* 커스텀 컬러 팔레트 */
-  /* Notionary Orange */
-  --color-notionary-orange: #e44d26; /* 기본 오렌지색 */
-  --color-notionary-orange-dark: #c33d16; /* 어두운 오렌지색 */
+  --color-notionary-orange: #e44d26;
+  --color-notionary-orange-dark: #c33d16;
+  --color-notionary-gray-light: #f4f7f9;
+  --color-notionary-gray: #f0f2f5;
+  --color-notionary-gray-medium: #dcdfe6;
+  --color-notionary-gray-dark: #a8b0c3;
+  --color-notionary-gray-darker: #8c98a9;
+  --color-notionary-text-primary: #2c3e50;
+  --color-notionary-text-secondary: #34495e;
+  --color-notionary-text: #555555;
+  --color-notionary-text-light: #7f8c8d;
+  --color-notionary-blue: #3498db;
+  --color-notionary-blue-dark: #2980b9;
 
-  /* Notionary Gray */
-  --color-notionary-gray-light: #f4f7f9; /* 배경색 (body bg) */
-  --color-notionary-gray: #f0f2f5; /* 입력 필드/태그 배경, 테두리 */
-  --color-notionary-gray-medium: #dcdfe6; /* 입력 필드 테두리, 미묘한 선 */
-  --color-notionary-gray-dark: #a8b0c3; /* 플레이스홀더 텍스트 */
-  --color-notionary-gray-darker: #8c98a9; /* 아이콘 또는 테두리를 위한 약간 더 어두운 회색 */
+  /* 2. 내장된 Typography 엔진을 커스터마이징합니다. */
+  /*    --tw-prose-* 변수를 사용하여 prose 스타일을 설정합니다. */
+  --tw-prose-body: var(--color-notionary-text);
+  --tw-prose-headings: var(--color-notionary-text-primary);
+  --tw-prose-links: var(--color-notionary-blue);
+  --tw-prose-bold: var(--color-notionary-text-primary);
+  --tw-prose-code: var(--color-notionary-orange);
+  --tw-prose-pre-bg: var(--color-notionary-text-primary);
+  --tw-prose-pre-code: var(--color-notionary-gray-light);
 
-  /* Notionary Text */
-  --color-notionary-text-primary: #2c3e50; /* 주요 제목, 중요한 텍스트 */
-  --color-notionary-text-secondary: #34495e; /* 부제목, 보조 텍스트 */
-  --color-notionary-text: #555555; /* 기본 문단 텍스트 */
-  --color-notionary-text-light: #7f8c8d; /* 밝은 텍스트, 캡션 */
-
-  /* Notionary Blue */
-  --color-notionary-blue: #3498db; /* 링크 또는 활성 상태에 사용되는 기본 파란색 */
-  --color-notionary-blue-dark: #2980b9; /* 링크 또는 활성 상태에 사용되는 어두운 파란색 */
+  /* 참고: h3, h4 등 더 세부적인 제어도 가능하지만, 
+     우선은 이 정도로도 충분히 잘 동작합니다. 
+     h3, h4는 기본적으로 --tw-prose-headings 색상을 따라갑니다. */
 }
-
-/* html,
-body {
-  @apply bg-white dark:bg-gray-950;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
-} */
 
 /* 전역 스타일 */
 html,
@@ -45,37 +43,13 @@ body {
   @apply font-sans antialiased bg-notionary-gray-light;
 }
 
-/* Typography 스타일 */
-.prose {
-  @apply text-notionary-text;
-}
-
-.prose a {
-  @apply text-notionary-blue hover:text-notionary-blue-dark;
-}
-
-.prose h1,
-.prose h2 {
-  @apply text-notionary-text-primary;
-}
-
-.prose h3,
-.prose h4 {
-  @apply text-notionary-text-secondary;
-}
-
-.prose strong {
-  @apply text-notionary-text-primary;
-}
-
-.prose code {
-  @apply text-notionary-orange bg-notionary-gray px-1 py-0.5 rounded text-sm font-medium;
-}
-
-.prose pre {
-  @apply p-4 overflow-x-auto rounded-md bg-notionary-text-primary text-notionary-gray-light;
-}
-
-.prose pre code {
-  @apply p-0 font-normal bg-transparent text-inherit;
-}
+/* 
+  👇 이 부분은 이제 필요 없습니다! 
+  @theme 블록 안에서 --tw-prose-* 변수로 모든 것을 처리했기 때문입니다.
+  Tailwind가 .prose 클래스를 발견하면, @theme의 설정을 읽어 자동으로 스타일을 생성합니다.
+*/
+/* 
+.prose { ... }
+.prose a { ... }
+...
+*/
