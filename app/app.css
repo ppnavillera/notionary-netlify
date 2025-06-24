@@ -1,9 +1,20 @@
 /* app.css (최종 완성본) */
 
+/* 1. Tailwind v4의 모든 기능을 불러옵니다. */
 @import "tailwindcss";
 
+/* 2. Typography 플러그인을 불러옵니다. */
+@plugin "@tailwindcss/typography";
+
+/* 3. JavaScript config 파일을 연결합니다. */
+@config "../tailwind.config.js";
+
+/* 2. @theme 블록 안에서 모든 커스텀 설정을 정의합니다. */
 @theme {
-  /* 1. 기본 테마를 정의합니다. (폰트, 색상 등) */
+  /* ======================================================================== */
+  /* Part A: 기본 테마 정의 (폰트, 색상 등)                                  */
+  /* ======================================================================== */
+
   --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
 
@@ -22,34 +33,40 @@
   --color-notionary-blue: #3498db;
   --color-notionary-blue-dark: #2980b9;
 
-  /* 2. 내장된 Typography 엔진을 커스터마이징합니다. */
-  /*    --tw-prose-* 변수를 사용하여 prose 스타일을 설정합니다. */
+  /* ======================================================================== */
+  /* Part B: 내장된 Typography 엔진의 스타일을 재정의합니다.                     */
+  /* ======================================================================== */
+
   --tw-prose-body: var(--color-notionary-text);
   --tw-prose-headings: var(--color-notionary-text-primary);
   --tw-prose-links: var(--color-notionary-blue);
   --tw-prose-bold: var(--color-notionary-text-primary);
+
+  /* 인용구 스타일 */
+  --tw-prose-quotes: var(--color-notionary-text);
+  --tw-prose-quote-borders: var(--color-notionary-gray-medium);
+
+  /* 코드 블록 스타일 */
   --tw-prose-code: var(--color-notionary-orange);
   --tw-prose-pre-bg: var(--color-notionary-text-primary);
   --tw-prose-pre-code: var(--color-notionary-gray-light);
 
-  /* 참고: h3, h4 등 더 세부적인 제어도 가능하지만, 
-     우선은 이 정도로도 충분히 잘 동작합니다. 
-     h3, h4는 기본적으로 --tw-prose-headings 색상을 따라갑니다. */
+  /*
+    더 세부적인 제어도 가능합니다. 예를 들어, h3/h4는 기본적으로
+    --tw-prose-headings 색상을 따라가지만, 별도로 지정하고 싶다면
+    config 파일을 사용하거나 직접 오버라이드 할 수 있습니다.
+    하지만 이 정도로도 대부분의 디자인이 완성됩니다.
+  */
 }
 
-/* 전역 스타일 */
+/* 3. 전역 스타일을 적용합니다. */
 html,
 body {
   @apply font-sans antialiased bg-notionary-gray-light;
 }
 
-/* 
-  👇 이 부분은 이제 필요 없습니다! 
-  @theme 블록 안에서 --tw-prose-* 변수로 모든 것을 처리했기 때문입니다.
+/*
+  👇 아래의 모든 Typography 스타일은 이제 필요 없습니다!
+  @theme 블록 안에서 --tw-prose-* 변수를 통해 모든 것을 설정했기 때문입니다.
   Tailwind가 .prose 클래스를 발견하면, @theme의 설정을 읽어 자동으로 스타일을 생성합니다.
-*/
-/* 
-.prose { ... }
-.prose a { ... }
-...
 */
