@@ -21,6 +21,30 @@ import { Form, redirect, useActionData } from "react-router";
 import { createClient } from "~/auth/supabase.server";
 import GoogleIcon from "~/components/icons/GoogleIcon";
 
+export async function loader({ request }: { request: Request }) {
+  // 이 loader는 현재 인증 상태를 확인하거나 초기 데이터를 로드하는 데 사용될
+  const { supabase, headers } = createClient(request);
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    // 사용자가 이미 로그인되어 있다면, 홈 페이지로 리다이렉트합니다
+    return redirect("/main", { headers });
+  }
+
+  // // 로그인된 사용자의 추가 데이터를 불러올 수 있습니다
+  // const { data: profile } = await supabase
+  //   .from("profiles") // 예시: 사용자 프로필 테이블
+  //   .select("*")
+  //   .eq("id", user.id)
+  //   .single();
+
+  // 로그인되지 않은 사용자는 계속 진행
+  return null; // 홈 페이지를 렌더링하기 위해 null을 반환합니다
+}
+
 // action 함수를 home.tsx에 추가
 export async function action({ request }: { request: Request }) {
   const { supabase, headers } = createClient(request);
