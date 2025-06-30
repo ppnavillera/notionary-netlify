@@ -20,8 +20,10 @@
 import { Form, redirect, useActionData } from "react-router";
 import { createClient } from "~/auth/supabase.server";
 import GoogleIcon from "~/components/icons/GoogleIcon";
+import type { Route } from "./+types/home";
+import type { R } from "node_modules/@react-router/dev/dist/routes-DHIOx0R9";
 
-export async function loader({ request }: { request: Request }) {
+export async function loader({ request }: Route.LoaderArgs) {
   // 이 loader는 현재 인증 상태를 확인하거나 초기 데이터를 로드하는 데 사용될
   const { supabase, headers } = createClient(request);
   const {
@@ -46,7 +48,7 @@ export async function loader({ request }: { request: Request }) {
 }
 
 // action 함수를 home.tsx에 추가
-export async function action({ request }: { request: Request }) {
+export async function action({ request }: Route.ActionArgs) {
   const { supabase, headers } = createClient(request);
 
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -69,8 +71,7 @@ export async function action({ request }: { request: Request }) {
 }
 
 // 메인 Home 컴포넌트 - 단순화
-export default function Home() {
-  const actionData = useActionData<typeof action>();
+export default function Home({ actionData }: Route.ComponentProps) {
   // 현재는 항상 LandingPage를 보여줍니다
   // 나중에 인증 상태에 따라 조건부 렌더링을 추가할 수 있습니다
   return (
