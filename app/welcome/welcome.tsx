@@ -1,12 +1,11 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 import google from "./google.svg";
-import { GoogleIcon } from "~/components/icons/GoogleIcon";
 
 export function Welcome({ message }: { message: string }) {
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
-      <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
+      <div className="flex flex-col items-center flex-1 min-h-0 gap-16">
         <header className="flex flex-col items-center gap-9">
           <div className="w-[500px] max-w-[100vw] p-4">
             <img
@@ -22,15 +21,15 @@ export function Welcome({ message }: { message: string }) {
           </div>
         </header>
         <div className="max-w-[300px] w-full space-y-6 px-4">
-          <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
-            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
+          <nav className="p-6 space-y-4 border border-gray-200 rounded-3xl dark:border-gray-700">
+            <p className="leading-6 text-center text-gray-700 dark:text-gray-200">
               What&apos;s next?
             </p>
             <ul>
               {resources.map(({ href, text, icon }) => (
                 <li key={href}>
                   <a
-                    className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
+                    className="flex items-center self-stretch gap-3 p-3 leading-normal text-blue-700 group hover:underline dark:text-blue-500"
                     href={href}
                     target="_blank"
                     rel="noreferrer"
@@ -46,9 +45,9 @@ export function Welcome({ message }: { message: string }) {
           <button
             type="button"
             onClick={() => {}}
-            className="w-full bg-white border border-gray-300 text-gray-700 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 rounded py-2 px-4 flex items-center justify-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-700"
+            className="flex items-center justify-center w-full gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
           >
-            <GoogleIcon />
+            {/* <GoogleIcon /> */}
             Continue with Google
           </button>
         </div>
