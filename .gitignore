@@ -9,3 +9,5 @@
 .netlify
 
 .env
+a.md
+app/docs/docs1.tsx
