@@ -128,35 +128,43 @@ export async function action({ request }: Route.ActionArgs) {
 export default function Home({ loaderData, actionData }: Route.ComponentProps) {
   console.log("[HOME] 컴포넌트 렌더링됨");
 
-  const searchParams = new URLSearchParams();
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("from") === "extension") {
-      console.log("[HOME] Extension 플래그 저장");
+  // 💡 공통 함수로 분리 - 중복 코드 제거
+  const setExtensionFlag = (source: string) => {
+    // 중복 저장 방지: 이미 설정되어 있으면 다시 저장하지 않음
+    if (localStorage.getItem("from_extension") !== "true") {
       localStorage.setItem("from_extension", "true");
+      console.log(`[HOME] Extension 플래그 저장됨 - 출처: ${source}`);
+      return true; // 실제로 저장했음을 반환
     }
-  }, []);
-  useEffect(() => {
-    console.log("[HOME] 컴포넌트 마운트됨");
+    console.log(`[HOME] Extension 플래그 이미 설정됨 - 출처: ${source}`);
+    return false; // 이미 설정되어 있음
+  };
 
-    const fromParam = searchParams.get("from");
-    console.log("[HOME] from 파라미터:", fromParam);
-
-    if (fromParam === "extension") {
-      console.log("[HOME] Extension 플래그 저장");
-      localStorage.setItem("from_extension", "true");
-    }
-  }, [searchParams]);
-  // 💡 보안 개선: eval() 함수를 안전한 방법으로 교체
-  // 이전 코드: eval(loaderData.script) - 해커가 악의적인 코드를 실행할 수 있었음
-  // 새 코드: 특정 기능만 허용하도록 제한
+  // 🔄 통합된 Extension 상태 확인 로직
   useEffect(() => {
-    if (loaderData?.fromExtension) {
-      // localStorage에 extension 플래그를 안전하게 설정
-      localStorage.setItem('from_extension', 'true');
-      console.log('[HOME] Extension 플래그 저장됨 - 안전한 방법으로 변경');
+    // Extension 여부를 확인하는 모든 방법을 체크하는 함수
+    // 확장프로그램에서 왔는지 확인하는 함수
+    const checkExtensionSource = () => {
+      // 1. URL 파라미터에서 확인 (?from=extension)
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromUrl = urlParams.get("from") === "extension";
+
+      // 2. 서버에서 전달된 데이터에서 확인 (loaderData.fromExtension)
+      const fromLoader = loaderData?.fromExtension;
+
+      // 우선순위: URL 파라미터 > 서버 데이터
+      // 어느 방법으로든 확장프로그램에서 왔다면 그 출처를 반환
+      if (fromUrl) return "URL 파라미터";
+      if (fromLoader) return "서버 데이터";
+      return null; // Extension이 아님
+    };
+
+    // Extension 출처를 확인하고, 있으면 플래그 저장
+    const extensionSource = checkExtensionSource();
+    if (extensionSource) {
+      setExtensionFlag(extensionSource);
     }
-  }, [loaderData]);
+  }, [loaderData]); // loaderData가 변경될 때마다 다시 실행
   // 현재는 항상 LandingPage를 보여줍니다
   // 나중에 인증 상태에 따라 조건부 렌더링을 추가할 수 있습니다
   return (
