@@ -1,30 +1,26 @@
-// import type { Route } from "./+types/home";
-// import { Welcome } from "../welcome/welcome";
-
-// // export function meta({}: Route.MetaArgs) {
-// //   return [
-// //     { title: "New React Router App" },
-// //     { name: "description", content: "Welcome to React Router!" },
-// //   ];
-// // }
-
-// // export function loader({ context }: Route.LoaderArgs) {
-// //   return { message: context.VALUE_FROM_NETLIFY };
-// // }
-
-// // export default function Home({ loaderData }: Route.ComponentProps) {
-// //   return <Welcome message={loaderData.message} />;
-// // }
-
 // routes/home.tsx - 이 파일 하나에 모든 것을 포함시켜야 합니다
 import { Form, redirect, useActionData } from "react-router";
 import { createClient } from "~/auth/supabase.server";
 import GoogleIcon from "~/components/icons/GoogleIcon";
 import type { Route } from "./+types/home";
 import type { R } from "node_modules/@react-router/dev/dist/routes-DHIOx0R9";
+import { useEffect } from "react";
 
 export async function loader({ request }: Route.LoaderArgs) {
   // 이 loader는 현재 인증 상태를 확인하거나 초기 데이터를 로드하는 데 사용될
+  const url = new URL(request.url);
+  const fromExtension = url.searchParams.get("from") === "extension";
+
+  console.log("[HOME LOADER] URL:", url.toString());
+  console.log("[HOME LOADER] from extension:", fromExtension);
+
+  // 브라우저에서 실행될 스크립트 주입
+  if (fromExtension) {
+    return {
+      fromExtension: true,
+      script: `localStorage.setItem('from_extension', 'true'); console.log('[INJECTED] Extension 플래그 저장됨');`,
+    };
+  }
   const { supabase, headers } = createClient(request);
   const {
     data: { user },
@@ -32,6 +28,17 @@ export async function loader({ request }: Route.LoaderArgs) {
   } = await supabase.auth.getUser();
 
   if (user) {
+    // 이미 로그인된 사용자가 Notion 설정도 되어있는지 확인
+    // Extension에서 온 경우 localStorage에 플래그 설정
+    if (fromExtension) {
+      // 쿠키나 헤더를 통해 Extension 플래그 전달
+      headers.append("Set-Cookie", "from_extension=true; Path=/; Max-Age=60");
+    }
+    const { data: notion } = await supabase
+      .from("notion")
+      .select("api_key")
+      .eq("user_id", user.id)
+      .single();
     // 사용자가 이미 로그인되어 있다면, 홈 페이지로 리다이렉트합니다
     return redirect("/main", { headers });
   }
@@ -47,19 +54,66 @@ export async function loader({ request }: Route.LoaderArgs) {
   return null; // 홈 페이지를 렌더링하기 위해 null을 반환합니다
 }
 
-// action 함수를 home.tsx에 추가
+// // action 함수를 home.tsx에 추가
+// export async function action({ request }: Route.ActionArgs) {
+//   const { supabase, headers } = createClient(request);
+
+//   // const { data, error } = await supabase.auth.signInWithOAuth({
+//   //   provider: "google",
+//   //   options: {
+//   //     redirectTo: `${new URL(request.url).origin}/auth/callback`,
+//   //   },
+//   // });
+//   // Extension에서 온 요청인지 확인
+//   const url = new URL(request.url);
+//   const fromExtension = url.searchParams.get("from") === "extension";
+
+//   const { data, error } = await supabase.auth.signInWithOAuth({
+//     provider: "google",
+//     options: {
+//       redirectTo: `${url.origin}/auth/callback`,
+//       scopes: "email profile",
+//       // state에 extension 정보 포함
+//       ...(fromExtension && {
+//         queryParams: {
+//           state: "from_extension",
+//         },
+//       }),
+//     },
+//   });
+
+//   if (error) {
+//     console.error("Error signing in:", error);
+//     return { error: "Failed to sign in with Google." };
+//   }
+
+//   if (data.url) {
+//     return redirect(data.url, { headers });
+//   }
+
+//   return { error: "Unexpected response from OAuth provider" };
+
+// }
+
+// home.tsx의 action 함수
 export async function action({ request }: Route.ActionArgs) {
   const { supabase, headers } = createClient(request);
+  const url = new URL(request.url);
+
+  // Extension에서 온 요청인지 확인
+  const fromExtension = url.searchParams.get("from") === "extension";
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${new URL(request.url).origin}/auth/callback`,
+      // callback URL에 직접 파라미터 추가
+      redirectTo: `${url.origin}/auth/callback${
+        fromExtension ? "?from=extension" : ""
+      }`,
     },
   });
 
   if (error) {
-    console.error("Error signing in:", error);
     return { error: "Failed to sign in with Google." };
   }
 
@@ -71,7 +125,38 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 // 메인 Home 컴포넌트 - 단순화
-export default function Home({ actionData }: Route.ComponentProps) {
+export default function Home({ loaderData, actionData }: Route.ComponentProps) {
+  console.log("[HOME] 컴포넌트 렌더링됨");
+
+  const searchParams = new URLSearchParams();
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("from") === "extension") {
+      console.log("[HOME] Extension 플래그 저장");
+      localStorage.setItem("from_extension", "true");
+    }
+  }, []);
+  useEffect(() => {
+    console.log("[HOME] 컴포넌트 마운트됨");
+
+    const fromParam = searchParams.get("from");
+    console.log("[HOME] from 파라미터:", fromParam);
+
+    if (fromParam === "extension") {
+      console.log("[HOME] Extension 플래그 저장");
+      localStorage.setItem("from_extension", "true");
+    }
+  }, [searchParams]);
+  // 💡 보안 개선: eval() 함수를 안전한 방법으로 교체
+  // 이전 코드: eval(loaderData.script) - 해커가 악의적인 코드를 실행할 수 있었음
+  // 새 코드: 특정 기능만 허용하도록 제한
+  useEffect(() => {
+    if (loaderData?.fromExtension) {
+      // localStorage에 extension 플래그를 안전하게 설정
+      localStorage.setItem('from_extension', 'true');
+      console.log('[HOME] Extension 플래그 저장됨 - 안전한 방법으로 변경');
+    }
+  }, [loaderData]);
   // 현재는 항상 LandingPage를 보여줍니다
   // 나중에 인증 상태에 따라 조건부 렌더링을 추가할 수 있습니다
   return (
