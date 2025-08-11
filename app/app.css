@@ -70,3 +70,21 @@ body {
   @theme 블록 안에서 --tw-prose-* 변수를 통해 모든 것을 설정했기 때문입니다.
   Tailwind가 .prose 클래스를 발견하면, @theme의 설정을 읽어 자동으로 스타일을 생성합니다.
 */
+/* 전역 CSS 또는 Tailwind config에 추가 */
+.no-scroll {
+  overflow: hidden !important;
+  height: 100vh;
+}
+
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
