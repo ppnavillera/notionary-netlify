@@ -1,0 +1,50 @@
+import Image from "../../components/Image";
+
+# 1단계: Notion Integration 생성하기
+
+
+
+'통합(integration)'이란, Notion을 다른 앱이나 서비스와 연결해서 데이터를 주고받거나 특정 작업을 자동화할 수 있도록 만들어주는 **연결 프로그램**이라고 생각하시면 쉬워요. 첫 단계는 이 연결 프로그램을 Notion에 등록하는 것입니다.
+
+
+### 새 API 통합 만들기
+
+1. Notion의 [API 통합 기능 관리 페이지](https://www.google.com/url?sa=E&q=https%3A%2F%2Fwww.notion.so%2Fprofile%2Fintegrations)로 이동
+2. 본인의 Notion 계정으로 로그인
+
+3. **"새 API 통합"** 버튼 클릭
+
+<Image src="/images/1.png" alt="설치 과정 1단계" />
+
+4. 다음 정보를 입력:
+    - **API 통합 이름**: 원하는 이름 입력 (예: "나만의 영어 단어장")
+    - **관련 워크스페이스**: 연동할 Notion 워크스페이스 선택
+    - **유형**: 프라이빗(internal) 선택
+    - **Logo**: 선택사항 (건너뛸 수 있음)
+
+
+
+<Image src="/images/2-2.JPG" alt="설치 과정 2단계" />
+5. **"저장"** 버튼 클릭
+6. **"API 통합 설정 구성"** 버튼 클릭
+
+<Image src="/images/3.png" alt="API 통합 설정 구성" />
+
+### API 키 발급 & 복사하기
+
+
+API 요청이 정상적으로 인증되려면 API 비밀 키가 필요합니다. 이 키는 여러분이 만든 연결 프로그램이 "아, 이건 허가된 프로그램이 맞구나" 하고 Notion이 인식할 수 있게 해주는 **일종의 비밀번호**입니다.
+
+1. **"프라이빗 API 통합 시크릿"** 옆의 **"표시하기"** 버튼 클릭
+2. 나타나는 토큰을 **복사**하기
+    - 형태: `ntn_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+
+
+<Image src="/images/4.JPG" alt="API 통합 설정 구성" />
+
+> ⚠️ **중요**: 이 API 키는 절대 다른 사람과 공유하지 마세요!
+
+
+
+### 복사된 토큰 값을 아래 입력창에 입력해주세요
+

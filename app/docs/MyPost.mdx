@@ -1,0 +1,71 @@
+import "katex/dist/katex.min.css"; // KaTeX CSS
+import "highlight.js/styles/github-dark.css"; // Highlight.js CSS
+
+---
+
+title: '나의 첫 포스트'
+author: 'Alice'
+date: '2023-01-01'
+tags: ['react', 'mdx']
+
+---
+
+# 안녕하세요, MDX!
+
+이것은 React 컴포넌트로 직접 변환된 MDX 파일입니다.
+
+- MDX는 마크다운과 JSX를 함께 쓸 수 있습니다.
+- 정말 편리하죠?
+
+export const metadata = {
+  author: "ChatGPT",
+  date: "2023-10-27",
+};
+
+<div
+  style={{
+    padding: "20px",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    marginTop: "16px",
+  }}
+>
+  여기는 JSX로 만든 박스입니다. 스타일도 바로 적용할 수 있어요!
+</div>
+t ### 테이블 (remark-gfm)
+
+| 헤더 1 | 헤더 2 |
+| :----- | :----- |
+| 셀 1   | 셀 2   |
+
+~~이 텍스트는 취소선입니다.~~
+
+### 수학 공식 (remark-math & rehype-katex)
+
+인라인 수학 공식: $E=mc^2$
+
+블록 수학 공식:
+
+$$
+\int_a^b f(x) dx = F(b) - F(a)
+$$
+
+### 코드 하이라이팅 (rehype-highlight)
+
+```javascript
+function greet() {
+  console.log("Hello, World!");
+}
+```
+
+```css
+body {
+  background-color: #f0f0f0;
+}
+```
+
+export function Thing() {
+  return <>World</>;
+}
+
+# Hello <Thing />
